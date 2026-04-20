@@ -1,7 +1,6 @@
 import pygame
 
 # keep track of what BGM is currently playing
-# this prevents restarting the same music again and again
 current_bgm = None
 
 def init_audio():

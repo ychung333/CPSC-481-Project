@@ -3,8 +3,10 @@ import pygame
 import numpy as np
 from title import draw_title_screen
 from result import draw_result_screen
+from sound import init_audio, play_bgm
 
 pygame.init()
+init_audio()
 
 # colors used in the game
 white = (255, 255, 255)
@@ -24,6 +26,10 @@ circle_radius = square_size // 3
 circle_width = 15
 cross_width = 25
 
+# sound file paths
+TITLE_BGM = "assets/bgm_title.wav"
+GAME_BGM = "assets/bgm_game.wav"
+
 # create the game window
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('tic tac toe')
@@ -41,6 +47,9 @@ result_message = ""
 start_button = None
 yes_button = None
 no_button = None
+
+# start title bgm
+play_bgm(TITLE_BGM)
 
 
 # draw the grid lines for the tic tac toe board
@@ -204,6 +213,7 @@ while True:
                     player = 1
                     result_message = ""
                     game_state = "playing"
+                    play_bgm(GAME_BGM)
 
             # game screen click
             elif game_state == "playing":
@@ -247,6 +257,7 @@ while True:
                     player = 1
                     result_message = ""
                     game_state = "playing"
+                    play_bgm(GAME_BGM)
 
                 elif no_button and no_button.collidepoint(event.pos):
                     pygame.quit()
@@ -259,6 +270,7 @@ while True:
                 player = 1
                 result_message = ""
                 game_state = "playing"
+                play_bgm(GAME_BGM)
 
     # draw current screen
     if game_state == "title":

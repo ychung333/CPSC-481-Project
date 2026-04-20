@@ -55,8 +55,6 @@ python TICTACTOE.py
 ---
 
 ## Project Structure
-.
-
 ├── assets
 |    ├── bgm_game.mp3
 |    └── bgn_titil.mp3

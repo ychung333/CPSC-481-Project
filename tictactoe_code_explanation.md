@@ -1,4 +1,4 @@
-# Tic Tac Toe AI Code Explanation
+# Tic Tac Toe AI Code Explanation(only about tictactoe.py)
 
 ## Summary Purpose
 

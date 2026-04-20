@@ -56,10 +56,15 @@ python TICTACTOE.py
 
 ## Project Structure
 .
+├── assets
+|    ├── bgm_game.mp3
+|    └── bgn_titil.mp3
+├── result.py
+├── run_instruction.md
+├── sound.py
 ├── TICTACTOE.py
 ├── README.md
-└── env/ (optional virtual environment)
-
+└── title.py
 ---
 
 ## Notes

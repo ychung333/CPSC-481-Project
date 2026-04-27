@@ -27,13 +27,17 @@ circle_width = 15
 cross_width = 25
 
 # sound file paths
-TITLE_BGM = "assets/bgm_title.wav"
-GAME_BGM = "assets/bgm_game.wav"
+TITLE_BGM = "assets/bgm_title.mp3"
+GAME_BGM = "assets/bgm_game.mp3"
 
 # create the game window
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('tic tac toe')
 screen.fill(black)
+
+# counter for nodes explored by minimax, alpha beta pruning, and A*
+# compare for efficiency
+nodes_explored = 0
 
 # create a 3x3 board filled with zeros
 # 0 = empty, 1 = player, 2 = ai
@@ -130,12 +134,17 @@ def check_win(player, check_board=board):
     return False
 
 
-# minimax algorithm to choose the best move for the ai
-def minimax(minimax_board, depth, is_maximizing):
+# Alpha Beta pruning to test efficiency
+def minimax(minimax_board, depth, alpha, beta, is_maximizing):
+    global nodes_explored
+    nodes_explored += 1
+
+    # optimized minimax function
+    # float('inf) --> 10 for faster win
     if check_win(2, minimax_board):
-        return float('inf')
+        return 10 - depth
     elif check_win(1, minimax_board):
-        return -float('inf')
+        return depth - 10
     elif is_board_full(minimax_board):
         return 0
 
@@ -145,9 +154,12 @@ def minimax(minimax_board, depth, is_maximizing):
             for col in range(board_cols):
                 if minimax_board[row][col] == 0:
                     minimax_board[row][col] = 2
-                    score = minimax(minimax_board, depth + 1, False)
+                    score = minimax(minimax_board, depth + 1, alpha, beta, False)
                     minimax_board[row][col] = 0
                     best_score = max(score, best_score)
+                    alpha = max(alpha, best_score)
+                    if beta <= alpha:
+                        return best_score # prune branch
         return best_score
     else:
         best_score = 1000
@@ -155,14 +167,19 @@ def minimax(minimax_board, depth, is_maximizing):
             for col in range(board_cols):
                 if minimax_board[row][col] == 0:
                     minimax_board[row][col] = 1
-                    score = minimax(minimax_board, depth + 1, True)
+                    score = minimax(minimax_board, depth + 1, alpha, beta, True)
                     minimax_board[row][col] = 0
                     best_score = min(score, best_score)
+                    beta = min(beta, best_score)
+                    if beta <= alpha:
+                        return best_score # prune branch
         return best_score
 
 
-# find and make the best move for the ai
+# best move for alpha beta pruning
 def best_move():
+    global nodes_explored
+    nodes_explored = 0
     best_score = -1000
     move = None
 
@@ -170,17 +187,17 @@ def best_move():
         for col in range(board_cols):
             if board[row][col] == 0:
                 board[row][col] = 2
-                score = minimax(board, 0, False)
+                score = minimax(board, 0, -1000, 1000, False)
                 board[row][col] = 0
 
                 if score > best_score:
                     best_score = score
                     move = (row, col)
 
+    print(f"Alpha-Beta explored {nodes_explored} nodes")
     if move:
         mark_square(move[0], move[1], 2)
         return True
-
     return False
 
 
